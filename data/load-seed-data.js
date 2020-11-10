@@ -33,7 +33,6 @@ async function run() {
         [plant.name, plant.cool_factor, user.id, false]);
       })
     );
-    
 
     console.log('seed data load complete', getEmoji(), getEmoji(), getEmoji());
   }

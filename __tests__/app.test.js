@@ -31,34 +31,61 @@ describe('app routes', () => {
       return client.end(done);
     });
 
-  test('returns animals', async() => {
+    test('returns JUST JON\'s plants', async() => {
 
-    const expectation = [
-      {
-        'id': 1,
-        'name': 'bessie',
-        'coolfactor': 3,
-        'owner_id': 1
-      },
-      {
-        'id': 2,
-        'name': 'jumpy',
-        'coolfactor': 4,
-        'owner_id': 1
-      },
-      {
-        'id': 3,
-        'name': 'spot',
-        'coolfactor': 10,
-        'owner_id': 1
-      }
-    ];
+      const expectation = [
+        {
+          'id': 4,
+          'name': 'bessie',
+          'cool_factor': 3,
+          is_watered: false,
+          'owner_id': 2
+        },
+        {
+          'id': 5,
+          'name': 'jumpy',
+          'cool_factor': 4,
+          is_watered: false,
+          'owner_id': 2
+        },
+        {
+          'id': 6,
+          'name': 'spot',
+          'cool_factor': 10,
+          is_watered: false,
+          'owner_id': 2
+        }
+      ];
 
-    const data = await fakeRequest(app)
-      .get('/animals')
-      .expect('Content-Type', /json/)
-      .expect(200);
+      await fakeRequest(app)
+        .post('/api/plants')
+        .send(expectation[0])
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
 
-    expect(data.body).toEqual(expectation);
+      await fakeRequest(app)
+        .post('/api/plants')
+        .send(expectation[1])
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      await fakeRequest(app)
+        .post('/api/plants')
+        .send(expectation[2])
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const data = await fakeRequest(app)
+        .get('/api/plants')
+        .set('Authorization', token)
+        .expect('Content-Type', /json/)
+        .expect(200);
+        
+      expect(data.body).toEqual(expectation);
+    });
   });
+  
 });
